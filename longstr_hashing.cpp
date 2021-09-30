@@ -1,69 +1,59 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
-typedef unsigned int Uint;
-const int MAX = 200010;
-const int SIZE = 1 << 16;
-const int MOD = SIZE - 1;
-int n, low, high, mid, ans;
-char str[MAX];
-Uint h, wei[MAX] = { 1 };
+const int mod = 1e5 + 3;
 
-struct Node{
-    char* key;
-    Node* next;
-    Node* alloc(char* nk, Node* np){
-        key = nk, next = np;
-        return this;
-    }
-}buf[MAX], * htab[SIZE];
-int bcnt;
-
-int strncmp(const char* s, const char* t, int len){
-    int i = 0;
-    for(; i < len && s[i] == t[i]; ++i);
-    return i == len;
+int MOD(long long n){
+    if(n >= 0) return n % mod;
+    else return ((-n / mod + 1) * mod + n) % mod;
 }
 
-void init(){
-    bcnt = h = 0;
-    for(int i = 0; i < SIZE; i++) htab[i] = NULL;
-}
-
-bool check(int mid){
-    init();
-    for(int i = 1; i <= n; i++){
-        h = h * 33 + str[i];
-        if(i >= mid){
-
-            h -= wei[mid] * str[i - mid];
-            int hidx = h & MOD;
-            Node* p = htab[hidx];
-            for(; p; p = p->next){
-                if(strncmp(p->key, &str[i - mid + 1], mid))
-                    return true;
-            }
-            htab[hidx] = buf[bcnt++].alloc(str + i - mid + 1, htab[hidx]);
-        }
-    }
-    return false;
-}
 int main(){
-    scanf("%d %s", &n, str + 1);
-    for(int i = 1; i <= n; i++) wei[i] = wei[i - 1] * 33;
+    int l;
+    char s[200005];
+    scanf("%d %s", &l, s);
+    int t = 0, r = l;
+    while(t + 1 < r){
+        int mid = (t + r) / 2;
+        long long pow = 1;
+        int hash = 0;
+        vector<int> pos[mod];
+        bool found = false;
 
-    high = n - 1;
-    while(low <= high){
-        mid = (low + high) / 2;
-        if(check(mid)){
-            ans = mid;
-            low = mid * 1;
+        for(int i = 0; i + mid < l; i++){
+            if(i == 0){
+                for(int j = 0; j < mid; j++){
+                    hash = MOD(hash + s[mid - 1 - j] * pow);
+                    if(j + 1 < mid) pow = MOD(pow << 1);
+                }
+            }
+            else{
+                hash = MOD(2 * (hash - s[i - 1] * pow) + s[i + mid - 1]);
+            }
+
+            if(!pos[hash].empty()){
+                for(int p : pos[hash]){
+                    bool flag = true;
+                    for(int j = 0; j < mid; j++){
+                        if(s[i + j] != s[p + j]){
+                            flag = false;
+                            break;
+                        }
+                    }
+
+                    if(flag){
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if(found) break;
+            else pos[hash].push_back(i);
         }
-        else
-            high = mid - 1;
-
+        if(found) t = mid;
+        else r = mid;
     }
-    cout << ans << "\n";
+    printf("%d", t);
     return 0;
 }
-//https://zoosso.tistory.com/406
