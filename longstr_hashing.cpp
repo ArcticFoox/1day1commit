@@ -57,3 +57,6 @@ int main(){
     printf("%d", t);
     return 0;
 }
+//https://mangu.tistory.com/23
+//https://blog.naver.com/ndb796/221240679247
+//https://m.blog.naver.com/PostView.nhn?isHttpsRedirect=true&blogId=kks227&logNo=220927272165&proxyReferer=

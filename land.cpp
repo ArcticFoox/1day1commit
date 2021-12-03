@@ -10,9 +10,10 @@ int arr[50][50];
 int visit[50][50];
 int cnt = 0;
 vector<int> v;
-queue<pair<int, int>> q;
+
 
 void bfs(int x, int y){
+    queue<pair<int, int>> q;
     q.push(make_pair(n, m));
 
     visit[n][m] = true;
@@ -30,7 +31,7 @@ void bfs(int x, int y){
             if(arr[next_x][next_y] && !visit[next_x][next_y]){
                 cnt++;
                 visit[next_x][next_y] = true;
-                bfs(next_x, next_y);
+                q.push(make_pair(next_x, next_y));
             }
         }
     }

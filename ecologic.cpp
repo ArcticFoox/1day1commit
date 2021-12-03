@@ -12,7 +12,7 @@ int main(){
     int count = 0;
     string name;
 
-    while(getline(cin, name)){
+    while(getline(cin, name)){     //입력을 그만 받으려면 어떻게 해야되나?
         arr[name]++;
         count++;
     }

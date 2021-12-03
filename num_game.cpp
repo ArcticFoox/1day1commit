@@ -27,10 +27,11 @@ int main(){
     }
 
     for(int i = 0; i < n; i++){
-        if(max[i] > m_max){
+        if(max[i] >= m_max){
             m_max = max[i];
-            max_index = i;
+            max_index = i + 1;
         }
+
     }
     cout << max_index;
     return 0;
